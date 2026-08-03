@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TrueLoyal ESP Setup Guide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @media print {
+      .no-print { display: none !important; }
+      .print-expand { display: block !important; }
+      .step-card { break-inside: avoid; }
+      body { font-size: 12px; }
+      .print-full-width { max-width: 100% !important; }
+    }
+    .accordion-body {
+      overflow: hidden;
+      transition: max-height 0.25s ease, opacity 0.2s ease;
+    }
+    .accordion-body.closed { max-height: 0; opacity: 0; }
+    .accordion-body.open { max-height: 2000px; opacity: 1; }
+    pre { white-space: pre; overflow-x: auto; }
+    @keyframes checkPop {
+      0% { transform: scale(0.5); opacity: 0; }
+      70% { transform: scale(1.15); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .check-pop { animation: checkPop 0.3s ease forwards; }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<div id="app"></div>
+<script>
+
+const LOGO_B64 = "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";
+
+const LOGOS = {
+  klaviyo: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#221F20"/><path d="M7 4.5h3v6.2l5.2-6.2H18l-5.4 6.2L18.2 19.5H15l-4.6-7V19.5H7V4.5z" fill="#FFD900"/></svg>`,
+  mailchimp: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#FFE01B"/><path d="M4 7h2.2l3.8 5.5L13.8 7H16v10h-2.2v-6.8l-3.8 5.4-3.8-5.4V17H4V7z" fill="#241C15"/></svg>`,
+  listrak: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#0066CC"/><path d="M8 5h2.3v12H17v2H8V5z" fill="white"/></svg>`,
+  hubspot: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#FF7A59"/><path d="M6 5h2.3v5.5h7.4V5H18v14h-2.3v-6.3H8.3V19H6V5z" fill="white"/></svg>`,
+  attentive: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#7C3AED"/><path d="M12 4.5L5.5 19.5h2.4l1.4-3.5h5.4l1.4 3.5h2.4L12 4.5zm0 3.8l2 5h-4l2-5z" fill="white"/></svg>`,
+  iterable: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#0052CC"/><rect x="11" y="5" width="2" height="2.5" rx="1" fill="white"/><rect x="11" y="9.5" width="2" height="9.5" fill="white"/></svg>`,
+};
+
+const LOGO_BG = {
+  klaviyo: 'bg-gray-900',
+  mailchimp: 'bg-yellow-50',
+  listrak: 'bg-blue-50',
+  hubspot: 'bg-orange-50',
+  attentive: 'bg-purple-50',
+  iterable: 'bg-blue-50',
+};
+
+const ESPS = [
+  {
+    id: "klaviyo",
+    name: "Klaviyo",
+    description: "API key — dev or admin required",
+    steps: [
+      {
+        id: 1,
+        title: "Create a Private API Key",
+        body: "In Klaviyo, go to Account (bottom-left) → Settings → API Keys → Create Private API Key. Give it Full Access, or at minimum: Events (write) and Profiles (write). Copy the key — you won't be able to view it again.",
+        tip: "Store the key in a password manager before closing the modal.",
+      },
+      {
+        id: 2,
+        title: "Share with TrueLoyal",
+        body: "Email support@trueloyal.com with your API key. TrueLoyal will configure the backend connection and register all event schemas in your Klaviyo account. You'll receive confirmation once it's live.",
+        action: { label: "Email support@trueloyal.com", href: "mailto:support@trueloyal.com" },
+      },
+      {
+        id: 3,
+        title: "Confirm events are registered",
+        body: "Once TrueLoyal confirms setup, go to Flows → Create Flow → Based on a metric. TrueLoyal loyalty events (Points Earned, Enrollment, Tier Upgrade, etc.) should appear in the metric list. If they don't appear within 24 hours, contact your onboarding manager.",
+      },
+      {
+        id: 4,
+        title: "Create a Flow",
+        body: "Go to Flows → Create Flow → Based on a metric. Select the loyalty event you want to trigger on. Add email or SMS action steps and build your message.",
+        tip: "Start with one event (e.g. Points Earned) and validate end-to-end before building all your flows.",
+      },
+      {
+        id: 5,
+        title: "Build your email template",
+        body: "Reference loyalty data in your template using Klaviyo's variable syntax. Event properties: {{ event.zrl_txn_points_awarded }}. Profile properties: {{ person.zrl_member_available_points }}.",
+        codeBlocks: [
+          {
+            label: "Points earned example",
+            value: "You earned {{ event.zrl_txn_points_awarded }} points for {{ event.zrl_txn_activity_name }}.\nYour new balance is {{ person.zrl_member_available_points }} points.",
+          },
+        ],
+      },
+      {
+        id: 6,
+        title: "Set the flow to Live",
+        body: "In the flow editor, click Review and Turn On. Select 'Live' to start sending to real members.",
+      },
+    ],
+    whatNext: [
+      {
+        title: "Test with a real member action",
+        body: "Trigger a loyalty event in TrueLoyal (e.g. award points to a test account) and confirm the flow fires in Klaviyo within a few minutes.",
+      },
+      {
+        title: "Build flows for other events",
+        body: "Repeat the process for other events: Enrollment, Tier Upgrade, Rewards Available, Points Expiring, etc.",
+      },
+    ],
+  },
+  {
+    id: "mailchimp",
+    name: "Mailchimp",
+    description: "API key + Audience ID required",
+    steps: [
+      {
+        id: 1,
+        title: "Generate your API key",
+        body: "In Mailchimp, click your profile icon → Profile → Extras → API keys → Create A Key. Give it a name, generate, and copy it immediately.",
+        tip: "You won't be able to view this key again. Store it somewhere secure before closing the page.",
+      },
+      {
+        id: 2,
+        title: "Find your Audience ID",
+        body: "Go to Audience → Audience Dashboard → Manage Audience → View Audiences. Click your audience name — the List ID appears on the page that opens. Mailchimp calls these Audiences, not Lists.",
+        tip: "If you have multiple audiences, make sure you're copying the ID for the one your loyalty members belong to.",
+      },
+      {
+        id: 3,
+        title: "Note your Base URL",
+        body: "Your base URL is embedded in your API key after the dash. For example, if your key ends in -us14, your base URL is us14.api.mailchimp.com.",
+      },
+      {
+        id: 4,
+        title: "Share credentials with TrueLoyal",
+        body: "Email support@trueloyal.com with three things: your API key, your Audience / List ID, and your base URL. TrueLoyal will set up the backend connection.",
+        action: { label: "Email support@trueloyal.com", href: "mailto:support@trueloyal.com" },
+      },
+      {
+        id: 5,
+        title: "Add merge tags in Mailchimp",
+        body: "TrueLoyal will provide a list of field names to add. To add them: go to Audience → Tags → Settings → Audience fields & MERGE tags → Add a field. Add each one with the correct field type. These become the merge tags you'll use in email templates.",
+        tip: "Add all fields before building your email templates — you can't reference a merge tag that doesn't exist yet.",
+      },
+      {
+        id: 6,
+        title: "Create a Journey",
+        body: "Go to Automations → All Journeys → Build from scratch. Name the journey, then set the starting point to API & Integrations → Event API. Choose the loyalty event to trigger on, then add a journey point and select Send email.",
+      },
+      {
+        id: 7,
+        title: "Configure and activate",
+        body: "In the email step: set your To/From addresses, subject line, and template. Use merge tag syntax for dynamic content. Member fields: |FNAME|, |AVAILPTS|. Transaction fields: |EVENT:zrl_txn_points_awarded|. Click Continue → Turn On to activate.",
+        codeBlocks: [
+          {
+            label: "Merge tag examples",
+            value: "Hi |FNAME|, you earned |EVENT:zrl_txn_points_awarded| points.\nYour balance is now |AVAILPTS| points.",
+          },
+        ],
+      },
+    ],
+    whatNext: [
+      {
+        title: "Verify a member sync",
+        body: "After activation, trigger a loyalty event in TrueLoyal and check Audience → All contacts in Mailchimp to confirm the member's data updated.",
+      },
+      {
+        title: "Set up journeys for other events",
+        body: "Repeat for Enrollment, Points Expiring, Rewards Available, and any other events your program uses.",
+      },
+    ],
+  },
+  {
+    id: "listrak",
+    name: "Listrak",
+    description: "Client credentials — admin required",
+    steps: [
+      {
+        id: 1,
+        title: "Connect in TrueLoyal Admin",
+        body: "Log into TrueLoyal Admin at app.trueloyal.com. Go to Apps → Email Integrations → Listrak. Enter your Listrak Client ID and Client Secret. These can be found in Listrak under Account → Application Settings.",
+        action: { label: "Open TrueLoyal Admin", href: "https://app.trueloyal.com" },
+      },
+      {
+        id: 2,
+        title: "Configure event sync",
+        body: "In the Listrak integration settings in TrueLoyal Admin, select which loyalty events to sync (e.g. Points Earned, Enrollment, Tier Upgrade). Each selected event will be sent to Listrak as a custom event when it fires.",
+      },
+      {
+        id: 3,
+        title: "Create custom event schemas in Listrak",
+        body: "In Listrak, go to Messaging → Journeys → Custom Events. Create a custom event for each TrueLoyal event you enabled. Add the corresponding custom properties — your onboarding manager will provide the full list of field names and types.",
+        tip: "Field names and types must match exactly what TrueLoyal sends. Use the field list from your onboarding manager rather than guessing.",
+      },
+      {
+        id: 4,
+        title: "Add profile fields",
+        body: "In Listrak, go to Contacts → Profile Fields. Add fields for member data (e.g. zrl_member_available_points as Numeric, zrl_member_enrollment_date as Date). These populate on every event and are available in all your emails.",
+      },
+      {
+        id: 5,
+        title: "Build a Journey",
+        body: "Go to Messaging → Journeys → Create Journey. Set the trigger to a TrueLoyal custom event. Add email or SMS steps, and reference profile fields and event properties as personalization merge tags in your templates.",
+      },
+      {
+        id: 6,
+        title: "Test and activate",
+        body: "Trigger a test event from TrueLoyal (e.g. award points to a test member) and confirm Listrak receives it. Check the journey activity log to verify the email step fired. Once confirmed, activate the journey.",
+      },
+    ],
+    whatNext: [
+      {
+        title: "Validate profile field sync",
+        body: "After the first event fires, open the test member's contact record in Listrak and confirm loyalty fields (points, tier, etc.) populated correctly.",
+      },
+      {
+        title: "Build journeys for other events",
+        body: "Repeat for Points Expiring, Rewards Available, Referral Success, and any other events your program uses.",
+      },
+    ],
+  },
+  {
+    id: "hubspot",
+    name: "HubSpot",
+    description: "Private App token — admin required",
+    steps: [
+      {
+        id: 1,
+        title: "Create a Private App",
+        body: "In HubSpot, go to Settings (gear icon, top right) → Integrations → Private Apps → Create a private app. Give it a name. Under Scopes, enable: crm.objects.contacts.read and crm.objects.contacts.write. Click Create App and copy the access token.",
+        tip: "HubSpot private apps are the recommended auth method. Legacy API keys are deprecated.",
+      },
+      {
+        id: 2,
+        title: "Share with TrueLoyal",
+        body: "Email support@trueloyal.com with your access token. TrueLoyal will configure the backend integration and create custom contact properties for loyalty data in your HubSpot account.",
+        action: { label: "Email support@trueloyal.com", href: "mailto:support@trueloyal.com" },
+      },
+      {
+        id: 3,
+        title: "Verify contact properties",
+        body: "Once TrueLoyal confirms setup, open any contact in HubSpot and look for loyalty fields (e.g. zrl_member_available_points, zrl_member_enrollment_date) in the property list. If they're missing, contact your onboarding manager.",
+      },
+      {
+        id: 4,
+        title: "Create a Workflow",
+        body: "Go to Automation → Workflows → Create Workflow → Contact-based. Set the enrollment trigger to a loyalty property update — for example, when zrl_member_available_points is updated. Add an email action step.",
+      },
+      {
+        id: 5,
+        title: "Build and activate",
+        body: "Use HubSpot's email editor to build your template. Reference loyalty fields with personalization tokens: {{ contact.zrl_member_available_points }}. Review the workflow, then click Turn On.",
+      },
+    ],
+    whatNext: [
+      {
+        title: "Test with a contact update",
+        body: "Trigger a loyalty event in TrueLoyal for a test member and confirm the HubSpot contact updates and the workflow fires.",
+      },
+    ],
+  },
+  {
+    id: "attentive",
+    name: "Attentive",
+    description: "API key + Source ID — admin required",
+    steps: [
+      {
+        id: 1,
+        title: "Create an API key",
+        body: "In Attentive, go to Setup → Marketplace → Create app. Enter an app name and contact email. Grant Write permissions to: Custom Events, Subscribers, and Custom Attributes. Click Create, then copy the API key immediately.",
+        tip: "If you lose the key, you can regenerate it — but you'll need to update the integration in TrueLoyal as well.",
+      },
+      {
+        id: 2,
+        title: "Get your Sign-Up Source ID",
+        body: "The Sign-Up Source ID is required for adding new subscribers via the API. Contact your Attentive Customer Success Manager to generate this ID.",
+        tip: "This is not self-serve — your Attentive CSM handles it. Allow a day or two if you're requesting it for the first time.",
+      },
+      {
+        id: 3,
+        title: "Share with TrueLoyal",
+        body: "Email support@trueloyal.com with three things: your API key, your Sign-Up Source ID, and your Attentive sandbox login credentials (for TrueLoyal to test the connection). TrueLoyal will configure the integration from there.",
+        action: { label: "Email support@trueloyal.com", href: "mailto:support@trueloyal.com" },
+      },
+      {
+        id: 4,
+        title: "Create Journeys for loyalty events",
+        body: "In Attentive, go to Messaging → Journeys. Create a new journey and select a custom event as the trigger. TrueLoyal events will appear once the integration is active (e.g., Points Earned, Enrollment, Tier Upgrade).",
+      },
+      {
+        id: 5,
+        title: "Build and activate",
+        body: "Add messaging steps to your journey. Use Attentive's personalization syntax to reference loyalty data. Member attributes: {{subscriber.custom['first_name']}}. Transaction attributes: {{triggerEvent.custom['PointsRedeemed']}}. Click Turn On when ready.",
+        codeBlocks: [
+          {
+            label: "Personalization syntax",
+            value: "Hi {{subscriber.custom['first_name']}},\nYou redeemed {{triggerEvent.custom['PointsRedeemed']}} points.",
+          },
+        ],
+      },
+    ],
+    whatNext: [
+      {
+        title: "Test with sandbox",
+        body: "Use the sandbox credentials you provided to TrueLoyal to trigger a test event and confirm the journey fires correctly before going live.",
+      },
+    ],
+  },
+  {
+    id: "iterable",
+    name: "Iterable",
+    description: "API key — admin required",
+    steps: [
+      {
+        id: 1,
+        title: "Generate an API key",
+        body: "In Iterable, go to Settings (top right) → API Keys → New API Key. Select Server-side as the key type. Copy the key.",
+        tip: "Server-side keys have full access. If your security policy requires scoped keys, confirm with your Iterable admin what permissions TrueLoyal needs.",
+      },
+      {
+        id: 2,
+        title: "Share with TrueLoyal",
+        body: "Email support@trueloyal.com with your API key. TrueLoyal will configure the backend and register event schemas in your Iterable project.",
+        action: { label: "Email support@trueloyal.com", href: "mailto:support@trueloyal.com" },
+      },
+      {
+        id: 3,
+        title: "Confirm events appear",
+        body: "Once TrueLoyal confirms setup, go to Data → Events in Iterable. Loyalty events should appear there after the first test action fires. If nothing appears within 24 hours, contact your onboarding manager.",
+      },
+      {
+        id: 4,
+        title: "Create a Triggered Campaign",
+        body: "Go to Campaigns → Create Campaign → Triggered Campaign. Set the trigger to a TrueLoyal event (e.g. trueloyal_points_earned). Build your email template in the next step.",
+      },
+      {
+        id: 5,
+        title: "Build template and activate",
+        body: "Use Iterable's template editor. Reference event data with Handlebars syntax. Event properties: {{data.zrl_txn_points_awarded}}. User properties: {{user.zrl_member_available_points}}. Save and activate the campaign.",
+        codeBlocks: [
+          {
+            label: "Handlebars example",
+            value: "You earned {{data.zrl_txn_points_awarded}} points.\nYour balance: {{user.zrl_member_available_points}} points.",
+          },
+        ],
+      },
+    ],
+    whatNext: [
+      {
+        title: "Validate with a test user",
+        body: "Trigger a loyalty event from TrueLoyal for a test account and confirm the campaign fires and the email arrives correctly.",
+      },
+    ],
+  },
+];
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let state = {
+  completed: JSON.parse(localStorage.getItem('tl_esp_completed') || '{}'),
+  activeStep: {},
+};
+
+function saveCompleted() {
+  const out = {};
+  for (const [k, v] of Object.entries(state.completed)) {
+    out[k] = v instanceof Set ? [...v] : v;
+  }
+  localStorage.setItem('tl_esp_completed', JSON.stringify(out));
+}
+
+function getCompleted(espId) {
+  const raw = state.completed[espId];
+  if (!raw) return new Set();
+  if (raw instanceof Set) return raw;
+  return new Set(raw);
+}
+
+// ─── ROUTER ──────────────────────────────────────────────────────────────────
+function getRoute() {
+  const hash = window.location.hash.replace('#', '') || '/';
+  const [path, queryString] = hash.split('?');
+  const params = {};
+  if (queryString) {
+    queryString.split('&').forEach(p => {
+      const [k, v] = p.split('=');
+      params[k] = v;
+    });
+  }
+  const parts = path.split('/').filter(Boolean);
+  if (parts.length === 0) return { page: 'home', params };
+  const esp = ESPS.find(e => e.id === parts[0]);
+  if (esp) return { page: 'esp', id: parts[0], params };
+  return { page: 'home', params };
+}
+
+function navigate(path) {
+  window.location.hash = path;
+}
+
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
+function escHtml(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function escAttr(str) {
+  return str.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function showToast(msg) {
+  const existing = document.getElementById('tl-toast');
+  if (existing) existing.remove();
+  const toast = document.createElement('div');
+  toast.id = 'tl-toast';
+  toast.className = 'fixed bottom-4 right-4 bg-gray-900 text-white text-sm px-4 py-2.5 rounded-lg shadow-lg z-50 no-print';
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 2200);
+}
+
+// ─── HEADER ──────────────────────────────────────────────────────────────────
+function renderHeader() {
+  return `
+    <header class="shadow-md no-print" style="background-color:#001e45">
+      <div class="max-w-4xl mx-auto px-4 py-4 flex items-center">
+        <a href="#/" class="flex items-center gap-3 cursor-pointer" data-link="/">
+          <img src="data:image/png;base64,${LOGO_B64}" alt="TrueLoyal" class="h-8 w-auto" style="mix-blend-mode:lighten" />
+        </a>
+        <span class="ml-3 text-white/60 text-sm hidden sm:inline">Email Integration Setup Guide</span>
+      </div>
+    </header>
+  `;
+}
+
+// ─── HOME PAGE ───────────────────────────────────────────────────────────────
+function renderHome() {
+  return `
+    ${renderHeader()}
+    <main class="max-w-3xl mx-auto px-4 py-12">
+      <div class="text-center mb-10">
+        <h1 class="text-2xl font-semibold text-[#001e45] mb-3">Email Integration Setup Guide</h1>
+        <p class="text-gray-500 text-sm max-w-lg mx-auto leading-relaxed">
+          Connect your email service provider to TrueLoyal to automate loyalty emails — enrollment confirmations, points updates, rewards notifications, and more.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        ${ESPS.map(esp => {
+          const completed = getCompleted(esp.id);
+          const pct = Math.round((completed.size / esp.steps.length) * 100);
+          const done = completed.size === esp.steps.length;
+          return `
+            <button
+              data-link="/${esp.id}"
+              class="group text-left p-5 rounded-xl border-2 ${done ? 'border-[#f8b4c3]' : 'border-gray-100'} bg-white hover:border-[#f8b4c3] hover:shadow-sm transition-all cursor-pointer relative"
+            >
+              ${done ? `<div class="absolute top-3 right-3 w-5 h-5 rounded-full bg-[#f8b4c3] flex items-center justify-center"><svg class="w-3 h-3" fill="none" stroke="#001e45" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>` : ''}
+              <div class="flex items-center gap-4">
+                <div class="flex-shrink-0 w-12 h-12 rounded-xl ${LOGO_BG[esp.id]} flex items-center justify-center p-2.5">
+                  ${LOGOS[esp.id]}
+                </div>
+                <div>
+                  <div class="font-medium text-[#001e45]">${esp.name}</div>
+                  <div class="text-sm text-gray-500 mt-0.5">${esp.description}</div>
+                  ${pct > 0 && !done ? `<div class="mt-1.5 flex items-center gap-2"><div class="w-20 bg-gray-100 rounded-full h-1"><div class="bg-[#001e45] h-1 rounded-full" style="width:${pct}%"></div></div><span class="text-xs text-gray-400">${completed.size}/${esp.steps.length}</span></div>` : done ? `<div class="text-xs text-[#001e45] font-medium mt-1">Setup complete</div>` : ''}
+                </div>
+              </div>
+            </button>
+          `;
+        }).join('')}
+      </div>
+
+      <footer class="text-center mt-12 text-xs text-gray-400">
+        Need help? Contact your TrueLoyal onboarding manager.
+      </footer>
+    </main>
+  `;
+}
+
+// ─── ESP PAGE ─────────────────────────────────────────────────────────────────
+function renderEsp(id, params) {
+  const esp = ESPS.find(e => e.id === id);
+  if (!esp) {
+    return `${renderHeader()}<main class="max-w-2xl mx-auto px-4 py-16 text-center"><h1 class="text-2xl font-bold text-[#001e45] mb-4">Provider not found</h1><button data-link="/" class="bg-[#001e45] text-white px-6 py-2 rounded-lg">Back</button></main>`;
+  }
+
+  const completed = getCompleted(id);
+  const totalSteps = esp.steps.length;
+  const completedCount = completed.size;
+  const allDone = completedCount === totalSteps;
+  const pct = Math.round((completedCount / totalSteps) * 100);
+
+  let activeIdx = 0;
+  if (params && params.step) {
+    const stepId = parseInt(params.step, 10);
+    const found = esp.steps.findIndex(s => s.id === stepId);
+    if (found >= 0) activeIdx = found;
+  } else if (state.activeStep[id] !== undefined) {
+    activeIdx = state.activeStep[id];
+  } else {
+    const firstIncomplete = esp.steps.findIndex(s => !completed.has(s.id));
+    activeIdx = firstIncomplete >= 0 ? firstIncomplete : 0;
+  }
+  if (activeIdx >= totalSteps) activeIdx = totalSteps - 1;
+  state.activeStep[id] = activeIdx;
+
+  function stepCard(step, idx) {
+    const isDone = completed.has(step.id);
+    const isActive = idx === activeIdx;
+
+    return `
+      <div
+        class="step-card rounded-xl border-2 transition-all duration-200 cursor-pointer overflow-hidden
+          ${isDone ? 'border-[#f8b4c3] bg-[#f8b4c3]/10' : isActive ? 'border-[#001e45] bg-white shadow-md' : 'border-gray-200 bg-white hover:border-gray-300'}"
+        data-step-idx="${idx}"
+        data-esp="${id}"
+        id="step-card-${idx}"
+      >
+        <div class="flex items-center gap-3 p-4 select-none">
+          <div class="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold
+            ${isDone ? 'bg-[#f8b4c3] text-[#001e45]' : isActive ? 'bg-[#001e45] text-white' : 'bg-gray-100 text-gray-500'}">
+            ${isDone
+              ? `<svg class="w-4 h-4 check-pop" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`
+              : step.id}
+          </div>
+          <span class="font-medium text-sm flex-1 ${isDone ? 'text-gray-500 line-through' : isActive ? 'text-[#001e45]' : 'text-gray-700'}">${step.title}</span>
+          <svg class="w-4 h-4 text-gray-400 flex-shrink-0 transition-transform ${isActive ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+
+        <div class="step-body ${isActive ? 'print-expand' : ''}" ${isActive ? '' : 'style="display:none"'}>
+          <div class="px-4 pb-5 space-y-4">
+            <p class="text-gray-700 text-sm leading-relaxed">${step.body}</p>
+
+            ${step.codeBlocks ? step.codeBlocks.map(cb => `
+              <div>
+                <p class="text-xs font-medium text-gray-500 mb-1">${cb.label}</p>
+                <div class="relative group/code">
+                  <pre class="bg-gray-950 text-green-400 text-xs rounded-lg px-4 py-3 font-mono leading-relaxed overflow-x-auto">${escHtml(cb.value)}</pre>
+                  <button
+                    class="no-print absolute top-2 right-2 opacity-0 group-hover/code:opacity-100 transition-opacity bg-gray-700 hover:bg-gray-600 text-white text-xs px-2 py-1 rounded"
+                    data-copy="${escAttr(cb.value)}"
+                  >Copy</button>
+                </div>
+              </div>
+            `).join('') : ''}
+
+            ${step.tip ? `
+              <div class="bg-blue-50 border border-blue-100 rounded-lg p-3 flex gap-2">
+                <svg class="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <p class="text-blue-700 text-xs leading-relaxed">${step.tip}</p>
+              </div>
+            ` : ''}
+
+            <div class="flex flex-wrap items-center gap-2 pt-1 no-print">
+              ${step.action ? `
+                <a href="${step.action.href}" target="_blank" rel="noopener"
+                  class="inline-flex items-center gap-1.5 text-sm bg-white border border-gray-200 text-[#001e45] font-medium px-3 py-1.5 rounded-lg hover:bg-gray-50 transition-colors">
+                  ${step.action.label}
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                </a>
+              ` : ''}
+
+              <button
+                class="inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-600 px-2 py-1.5 rounded transition-colors"
+                data-copy-link="${id}" data-copy-step="${step.id}"
+                title="Copy link to this step"
+              >
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                Copy link to step
+              </button>
+
+              <div class="flex-1"></div>
+
+              ${isDone
+                ? `<button data-uncomplete="${id}" data-step="${step.id}" class="text-xs text-gray-400 hover:text-gray-600 underline px-2 py-1.5 transition-colors">Mark incomplete</button>`
+                : `<button data-complete="${id}" data-step="${step.id}" data-next-idx="${idx + 1 < totalSteps ? idx + 1 : -1}"
+                    class="bg-[#001e45] text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-[#002d6b] transition-colors flex items-center gap-2">
+                    ${idx + 1 < totalSteps ? 'Mark complete &amp; continue' : 'Mark complete'}
+                    <svg class="w-4 h-4" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                  </button>`
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    ${renderHeader()}
+    <main class="max-w-2xl mx-auto px-4 py-8 print-full-width">
+
+      <div class="flex items-center justify-between mb-6 no-print">
+        <button data-link="/" class="flex items-center gap-2 text-sm text-gray-500 hover:text-[#001e45] transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          All providers
+        </button>
+        <button id="print-btn" class="flex items-center gap-1.5 text-sm text-gray-500 hover:text-[#001e45] transition-colors border border-gray-200 rounded-lg px-3 py-1.5 hover:border-gray-300">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+          Print / Save PDF
+        </button>
+      </div>
+
+      <div class="flex items-center gap-4 mb-6">
+        <div class="w-12 h-12 rounded-xl ${LOGO_BG[esp.id]} flex items-center justify-center p-2.5 flex-shrink-0">
+          ${LOGOS[esp.id]}
+        </div>
+        <div>
+          <h1 class="text-xl font-bold text-[#001e45]">${esp.name}</h1>
+          <p class="text-gray-500 text-sm">${esp.description}</p>
+        </div>
+      </div>
+
+      <div class="mb-8">
+        <div class="flex items-center justify-between text-xs text-gray-500 mb-1.5">
+          <span>${completedCount} of ${totalSteps} steps complete</span>
+          <span>${pct}%</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-2">
+          <div class="h-2 rounded-full transition-all duration-500 ${allDone ? 'bg-[#f8b4c3]' : 'bg-[#001e45]'}" style="width:${pct}%"></div>
+        </div>
+      </div>
+
+      ${allDone ? renderSuccessScreen(esp) : `
+        <div class="space-y-3" id="steps-list">
+          ${esp.steps.map((step, idx) => stepCard(step, idx)).join('')}
+        </div>
+      `}
+    </main>
+  `;
+}
+
+function renderSuccessScreen(esp) {
+  return `
+    <div class="text-center py-8">
+      <div class="w-16 h-16 rounded-full bg-[#f8b4c3] flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8" fill="none" stroke="#001e45" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+      </div>
+      <h2 class="text-2xl font-bold text-[#001e45] mb-2">${esp.name} connected</h2>
+      <p class="text-gray-600 mb-8">You've finished the ${esp.name} setup. Here's what to do next.</p>
+    </div>
+
+    <div class="space-y-3 mb-8">
+      ${(esp.whatNext || []).map((item, i) => `
+        <div class="bg-white rounded-xl border border-gray-200 p-5">
+          <div class="flex items-start gap-3">
+            <div class="w-6 h-6 rounded-full bg-[#f8b4c3] text-[#001e45] text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">${i + 1}</div>
+            <div class="flex-1">
+              <h3 class="font-semibold text-gray-900 text-sm mb-1">${item.title}</h3>
+              <p class="text-gray-600 text-sm leading-relaxed">${item.body}</p>
+              ${item.action ? `
+                <a href="${item.action.href}" target="_blank" rel="noopener"
+                  class="inline-flex items-center gap-1.5 mt-2 text-sm text-[#001e45] font-medium hover:underline no-print">
+                  ${item.action.label}
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                </a>
+              ` : ''}
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="flex flex-wrap gap-3 no-print">
+      <button data-link="/" class="bg-[#001e45] text-white font-medium px-5 py-2.5 rounded-lg hover:bg-[#002d6b] transition-colors">
+        Back to all providers
+      </button>
+      <button data-reset-esp="${esp.id}" class="text-gray-500 border border-gray-200 px-4 py-2.5 rounded-lg hover:bg-gray-50 text-sm transition-colors">
+        Reset progress
+      </button>
+    </div>
+  `;
+}
+
+// ─── RENDER ENGINE ───────────────────────────────────────────────────────────
+function render() {
+  const route = getRoute();
+  const app = document.getElementById('app');
+  if (route.page === 'home') {
+    app.innerHTML = renderHome();
+  } else if (route.page === 'esp') {
+    app.innerHTML = renderEsp(route.id, route.params);
+  } else {
+    app.innerHTML = renderHome();
+  }
+  window.scrollTo(0, 0);
+}
+
+// ─── EVENT DELEGATION ────────────────────────────────────────────────────────
+document.addEventListener('click', function(e) {
+  const linkTarget = e.target.closest('[data-link]');
+  if (linkTarget) {
+    e.preventDefault();
+    navigate(linkTarget.dataset.link);
+    return;
+  }
+
+  const stepCard = e.target.closest('[data-step-idx]');
+  if (stepCard && !e.target.closest('[data-complete]') && !e.target.closest('[data-uncomplete]') && !e.target.closest('[data-copy-link]') && !e.target.closest('[data-copy]') && !e.target.closest('a')) {
+    const espId = stepCard.dataset.esp;
+    const newIdx = parseInt(stepCard.dataset.stepIdx, 10);
+    state.activeStep[espId] = state.activeStep[espId] === newIdx ? -1 : newIdx;
+    render();
+    if (state.activeStep[espId] >= 0) {
+      setTimeout(() => {
+        const el = document.getElementById(`step-card-${newIdx}`);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 50);
+    }
+    return;
+  }
+
+  const completeBtn = e.target.closest('[data-complete]');
+  if (completeBtn) {
+    const espId = completeBtn.dataset.complete;
+    const stepId = parseInt(completeBtn.dataset.step, 10);
+    const nextIdx = parseInt(completeBtn.dataset.nextIdx, 10);
+    const completed = getCompleted(espId);
+    completed.add(stepId);
+    state.completed[espId] = completed;
+    saveCompleted();
+    if (nextIdx >= 0) state.activeStep[espId] = nextIdx;
+    render();
+    if (nextIdx >= 0) {
+      setTimeout(() => {
+        const el = document.getElementById(`step-card-${nextIdx}`);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 50);
+    }
+    return;
+  }
+
+  const uncompleteBtn = e.target.closest('[data-uncomplete]');
+  if (uncompleteBtn) {
+    const espId = uncompleteBtn.dataset.uncomplete;
+    const stepId = parseInt(uncompleteBtn.dataset.step, 10);
+    const completed = getCompleted(espId);
+    completed.delete(stepId);
+    state.completed[espId] = completed;
+    saveCompleted();
+    render();
+    return;
+  }
+
+  const resetBtn = e.target.closest('[data-reset-esp]');
+  if (resetBtn) {
+    const espId = resetBtn.dataset.resetEsp;
+    delete state.completed[espId];
+    delete state.activeStep[espId];
+    saveCompleted();
+    render();
+    return;
+  }
+
+  const copyLinkBtn = e.target.closest('[data-copy-link]');
+  if (copyLinkBtn) {
+    const espId = copyLinkBtn.dataset.copyLink;
+    const stepId = copyLinkBtn.dataset.copyStep;
+    const url = `${location.origin}${location.pathname}#/${espId}?step=${stepId}`;
+    navigator.clipboard.writeText(url).then(() => showToast('Link copied to clipboard'));
+    return;
+  }
+
+  const copyBtn = e.target.closest('[data-copy]');
+  if (copyBtn) {
+    navigator.clipboard.writeText(copyBtn.dataset.copy).then(() => showToast('Copied to clipboard'));
+    return;
+  }
+
+  const printBtn = e.target.closest('#print-btn');
+  if (printBtn) {
+    document.querySelectorAll('.step-body').forEach(el => { el.style.display = ''; });
+    window.print();
+    return;
+  }
+});
+
+window.addEventListener('hashchange', render);
+window.addEventListener('DOMContentLoaded', render);
+if (document.readyState !== 'loading') render();
+
+</script>
+</body>
+</html>
