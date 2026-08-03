@@ -355,16 +355,12 @@ const ESPS = [
 
 // ─── STATE ───────────────────────────────────────────────────────────────────
 let state = {
-  completed: JSON.parse(localStorage.getItem('tl_esp_completed') || '{}'),
+  completed: {},
   activeStep: {},
 };
 
 function saveCompleted() {
-  const out = {};
-  for (const [k, v] of Object.entries(state.completed)) {
-    out[k] = v instanceof Set ? [...v] : v;
-  }
-  localStorage.setItem('tl_esp_completed', JSON.stringify(out));
+  // intentionally no-op: progress lives in memory only (resets on refresh, isolated per tab)
 }
 
 function getCompleted(espId) {
