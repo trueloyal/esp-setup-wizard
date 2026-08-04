@@ -54,7 +54,7 @@ const ESPS = [
   {
     id: "klaviyo",
     name: "Klaviyo",
-    description: "API key — dev or admin required",
+    description: "Self-serve setup via TrueLoyal Admin Console",
     steps: [
       {
         id: 1,
@@ -64,23 +64,18 @@ const ESPS = [
       },
       {
         id: 2,
-        title: "Share with TrueLoyal",
-        body: "Email support@trueloyal.com with your API key. TrueLoyal will configure the backend connection and register all event schemas in your Klaviyo account. You'll receive confirmation once it's live.",
-        action: { label: "Email support@trueloyal.com", href: "mailto:support@trueloyal.com" },
+        title: "Connect Klaviyo in TrueLoyal",
+        body: "In the TrueLoyal Admin Console, go to General → Apps → Klaviyo. Enter your Private API Key, then select the events you want to send to Klaviyo. Click 'Test and Save' to confirm the connection works. Once confirmed, use the 'Actions' button to enable the integration.",
+        tip: "Select all events you plan to use now — you can always adjust later, but it's easier to start with everything enabled.",
       },
       {
         id: 3,
-        title: "Confirm events are registered",
-        body: "Once TrueLoyal confirms setup, go to Flows → Create Flow → Based on a metric. TrueLoyal loyalty events (Points Earned, Enrollment, Tier Upgrade, etc.) should appear in the metric list. If they don't appear within 24 hours, contact your onboarding manager.",
-      },
-      {
-        id: 4,
         title: "Create a Flow",
-        body: "Go to Flows → Create Flow → Based on a metric. Select the loyalty event you want to trigger on. Add email or SMS action steps and build your message.",
+        body: "In Klaviyo, go to Flows → Create Flow → Based on a metric. Select the loyalty event you want to trigger on. Add email or SMS action steps and build your message.",
         tip: "Start with one event (e.g. Points Earned) and validate end-to-end before building all your flows.",
       },
       {
-        id: 5,
+        id: 4,
         title: "Build your email template",
         body: "Reference loyalty data in your template using Klaviyo's variable syntax. Event properties: {{ event.zrl_txn_points_awarded }}. Profile properties: {{ person.zrl_member_available_points }}.",
         codeBlocks: [
@@ -91,7 +86,7 @@ const ESPS = [
         ],
       },
       {
-        id: 6,
+        id: 5,
         title: "Set the flow to Live",
         body: "In the flow editor, click Review and Turn On. Select 'Live' to start sending to real members.",
       },
