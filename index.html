@@ -167,18 +167,19 @@ const ESPS = [
   {
     id: "listrak",
     name: "Listrak",
-    description: "Client credentials — admin required",
+    description: "Self-serve setup via TrueLoyal Admin Console",
     steps: [
       {
         id: 1,
-        title: "Connect in TrueLoyal Admin",
-        body: "Log into TrueLoyal Admin at app.trueloyal.com. Go to Apps → Email Integrations → Listrak. Enter your Listrak Client ID and Client Secret. These can be found in Listrak under Account → Application Settings.",
-        action: { label: "Open TrueLoyal Admin", href: "https://app.trueloyal.com" },
+        title: "Get your Listrak credentials",
+        body: "In Listrak, locate your Client ID and Client Secret. These can be found under Account → Application Settings. You'll need both to connect the integration in TrueLoyal.",
       },
       {
         id: 2,
-        title: "Configure event sync",
-        body: "In the Listrak integration settings in TrueLoyal Admin, select which loyalty events to sync (e.g. Points Earned, Enrollment, Tier Upgrade). Each selected event will be sent to Listrak as a custom event when it fires.",
+        title: "Connect Listrak in TrueLoyal",
+        body: "In the TrueLoyal Admin Console, go to General → Apps → Listrak. Set your Listrak Workflow (Conversations or Journeys) and Listrak Marketing Mechanism (Email, SMS, or Email+SMS). Enter your Client ID and Client Secret, then click 'Fetch Lists' to load your Listrak lists. Select the events you want to sync, then click 'Test and Save'. Use the 'Actions' button to enable the integration.",
+        action: { label: "Open TrueLoyal Admin", href: "https://app.trueloyal.com" },
+        tip: "Select all events you plan to use now — it's easier to start with everything enabled and trim later.",
       },
       {
         id: 3,
@@ -216,32 +217,28 @@ const ESPS = [
   {
     id: "hubspot",
     name: "HubSpot",
-    description: "Private App token — admin required",
+    description: "Self-serve setup via TrueLoyal Admin Console",
     steps: [
       {
         id: 1,
-        title: "Create a Private App",
-        body: "In HubSpot, go to Settings (gear icon, top right) → Integrations → Private Apps → Create a private app. Give it a name. Under Scopes, enable: crm.objects.contacts.read and crm.objects.contacts.write. Click Create App and copy the access token.",
+        title: "Create a Private App in HubSpot",
+        body: "In HubSpot, go to Settings (gear icon, top right) → Integrations → Private Apps → Create a private app. Give it a name. Under Scopes, enable all of the following: crm.objects.contacts.write, crm.schemas.contacts.write, crm.objects.contacts.read, crm.schemas.contacts.read, automation, analytics.behavioral_events.send, behavioral_events.event_definitions.read_write. Click Create App and copy the access token.",
         tip: "HubSpot private apps are the recommended auth method. Legacy API keys are deprecated.",
       },
       {
         id: 2,
-        title: "Share with TrueLoyal",
-        body: "Email support@trueloyal.com with your access token. TrueLoyal will configure the backend integration and create custom contact properties for loyalty data in your HubSpot account.",
-        action: { label: "Email support@trueloyal.com", href: "mailto:support@trueloyal.com" },
+        title: "Connect HubSpot in TrueLoyal",
+        body: "In the TrueLoyal Admin Console, go to General → Apps → HubSpot. Enter your access token, then select the events you want to send to HubSpot. Click 'Test and Save' to confirm the connection works. Use the 'Actions' button to enable the integration.",
+        action: { label: "Open TrueLoyal Admin", href: "https://app.trueloyal.com" },
+        tip: "Select all events you plan to use now — you can adjust later.",
       },
       {
         id: 3,
-        title: "Verify contact properties",
-        body: "Once TrueLoyal confirms setup, open any contact in HubSpot and look for loyalty fields (e.g. zrl_member_available_points, zrl_member_enrollment_date) in the property list. If they're missing, contact your onboarding manager.",
-      },
-      {
-        id: 4,
         title: "Create a Workflow",
         body: "Go to Automation → Workflows → Create Workflow → Contact-based. Set the enrollment trigger to a loyalty property update — for example, when zrl_member_available_points is updated. Add an email action step.",
       },
       {
-        id: 5,
+        id: 4,
         title: "Build and activate",
         body: "Use HubSpot's email editor to build your template. Reference loyalty fields with personalization tokens: {{ contact.zrl_member_available_points }}. Review the workflow, then click Turn On.",
       },
@@ -303,7 +300,7 @@ const ESPS = [
   {
     id: "iterable",
     name: "Iterable",
-    description: "API key — admin required",
+    description: "Self-serve setup via TrueLoyal Admin Console",
     steps: [
       {
         id: 1,
@@ -313,22 +310,17 @@ const ESPS = [
       },
       {
         id: 2,
-        title: "Share with TrueLoyal",
-        body: "Email support@trueloyal.com with your API key. TrueLoyal will configure the backend and register event schemas in your Iterable project.",
-        action: { label: "Email support@trueloyal.com", href: "mailto:support@trueloyal.com" },
+        title: "Connect Iterable in TrueLoyal",
+        body: "In the TrueLoyal Admin Console, go to General → Apps → Iterable. Enter your API key and click 'Connect to Iterable'.",
+        action: { label: "Open TrueLoyal Admin", href: "https://app.trueloyal.com" },
       },
       {
         id: 3,
-        title: "Confirm events appear",
-        body: "Once TrueLoyal confirms setup, go to Data → Events in Iterable. Loyalty events should appear there after the first test action fires. If nothing appears within 24 hours, contact your onboarding manager.",
-      },
-      {
-        id: 4,
         title: "Create a Triggered Campaign",
         body: "Go to Campaigns → Create Campaign → Triggered Campaign. Set the trigger to a TrueLoyal event (e.g. trueloyal_points_earned). Build your email template in the next step.",
       },
       {
-        id: 5,
+        id: 4,
         title: "Build template and activate",
         body: "Use Iterable's template editor. Reference event data with Handlebars syntax. Event properties: {{data.zrl_txn_points_awarded}}. User properties: {{user.zrl_member_available_points}}. Save and activate the campaign.",
         codeBlocks: [
